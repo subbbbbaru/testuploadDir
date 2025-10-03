@@ -27,7 +27,7 @@ flask==2.0.1
 
 Этот вариант собирает образ, включив в него все файлы и зависимости сразу в одном этапе.
 ```Dockerfile
-FROM python:3.9-slim-buster AS base
+FROM python:3.12-slim-buster AS base
 
 WORKDIR /app
 
@@ -41,7 +41,7 @@ CMD ["python", "app.py"]
 
 Что здесь происходит?
 
-Мы используем базовый образ Python версии 3.9 на основе Debian Buster (легкий дистрибутив).
+Мы используем базовый образ Python версии 3.12 на основе (легкий дистрибутив).
 Создаем рабочую директорию /app.
 Копируем файл требований (requirements.txt) внутрь контейнера и устанавливаем необходимые пакеты.
 Затем копируем весь исходный код нашего проекта в контейнер.
@@ -53,17 +53,17 @@ CMD ["python", "app.py"]
 Здесь мы разделяем процесс сборки на две части: одна стадия для установки зависимостей, вторая — для развертывания готового приложения.
 ```Dockerfile
 # Этап 1: Установка зависимостей
-FROM python:3.9-slim-buster AS builder
+FROM python:3.12-slim-buster AS builder
 
 WORKDIR /build
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Этап 2: Создание финального образа
-FROM python:3.9-slim-buster AS final
+FROM python:3.12-slim-buster AS final
 
 WORKDIR /app
-COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY . .
 
 CMD ["python", "app.py"]
